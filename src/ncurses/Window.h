@@ -4,7 +4,11 @@
 
 #include <cstddef>
 #include <vector>
-#include <ncurses.h>
+#ifdef _WIN32
+# include <curses.h>
+#else
+# include <ncurses.h>
+#endif
 #include <panel.h>
 
 namespace ncurses
@@ -17,6 +21,10 @@ public:
   Window(WINDOW *w, bool delete_window)
   {
     _screen = w;
+    if (!_screen) {
+      throw std::logic_error("Invalid window passed");
+    }
+
     delete_window = delete_window;
 
     box(_screen, '1', '2');
@@ -58,13 +66,13 @@ public:
 
   void clear()
   {
-    ::wclear(_screen);
+    ::werase(_screen);
   }
 
   using Painter::print;
   void print(Position pos, const char *data, std::size_t len) override
   {
-    mvwaddnstr(_screen, pos.y(), pos.x(), data, len);
+    mvwaddnstr(_screen, pos.y(), pos.x(), data, (int)len);
   }
 
   void push_refresh_block()
@@ -82,7 +90,8 @@ public:
   {
     if (refresh_block_count == 0)
     {
-      ::wrefresh(_screen);
+      //::wrefresh(_screen);
+	  ::wnoutrefresh(_screen);
     }
   }
 

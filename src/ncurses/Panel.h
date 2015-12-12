@@ -30,6 +30,11 @@ public:
   {
     hide_panel(_panel);
   }
+  
+  void border()
+  {
+	  wborder(_screen, 0, 0, 0, 0, 0, 0, 0, 0);
+  }
 
 
 private:

@@ -13,25 +13,26 @@ int main(int argc, char *argv[])
 
   auto size = w->size();
 
-  auto sub = c.new_panel(ncurses::Position(10, 10), ncurses::Size(50, 50));
+  auto sub = c.new_panel(ncurses::Position(10, 10), ncurses::Size(10, 10));
 
   int x = 0, y = 0;
   while(true) {
-    auto size = w->size();
-    w->clear();
+    {
+      auto size = w->size();
+      w->clear();
 
-    w->print({x, y}, "o");  // Print our "ball" at the current xy position
-    sub->print({0, 0}, "POSRK");
+      w->print({ x, y }, "o");  // Print our "ball" at the current xy position
+      sub->border();
+      sub->print({ 1, 1 }, "POSRK");
 
-    std::this_thread::sleep_for(std::chrono::microseconds(30000));       // Shorter delay between movements
-    x++;                 // Advance the ball to the right
-    if (x == size.x()) {
-      x = 0;
-      ++y;
+      std::this_thread::sleep_for(std::chrono::microseconds(30000));       // Shorter delay between movements
+      x++;                 // Advance the ball to the right
+      if (x == size.x()) {
+        x = 0;
+        ++y;
+      }
     }
     
     c.update_panels();
   }
-
-  sleep(1);
 }

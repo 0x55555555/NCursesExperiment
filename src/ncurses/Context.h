@@ -53,7 +53,11 @@ public:
 
   std::unique_ptr<Panel> new_panel(Position position, Size size)
   {
-    return std::make_unique<Panel>(newwin(size.y(), size.x(), position.y(), position.x()), true);
+    auto new_window = newwin(size.y(), size.x(), position.y(), position.x());
+    if (!new_window) {
+      throw std::invalid_argument("Invalid argument passed for window construction");
+    }
+    return std::make_unique<Panel>(new_window, true);
   }
 
   void update_panels()
