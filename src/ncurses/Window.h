@@ -9,6 +9,7 @@
 #else
 # include <ncurses.h>
 #endif
+#include <memory>
 #include <panel.h>
 
 namespace ncurses
@@ -93,6 +94,12 @@ public:
       //::wrefresh(_screen);
 	  ::wnoutrefresh(_screen);
     }
+  }
+
+  std::unique_ptr<Window> sub_window(Position pos, Size size)
+  {
+    auto new_win = derwin(_screen, size.y(), size.x(), pos.y(), pos.x());
+    return std::make_unique<Window>(new_win, true);
   }
 
 protected:

@@ -35,8 +35,7 @@ public:
   {
 	  wborder(_screen, 0, 0, 0, 0, 0, 0, 0, 0);
   }
-
-
+  
 private:
   PANEL *_panel;
 };
